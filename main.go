@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 
+	"./models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,12 +17,19 @@ func HomePage(c *gin.Context) {
 
 func PostHomePage(c *gin.Context) {
 	body := c.Request.Body
+
+	var login models.Login
+
 	value, err := ioutil.ReadAll(body)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+
+	json.Unmarshal(value, &login)
+
 	c.JSON(200, gin.H{
-		"message": string(value),
+		"Nome":  string(login.Name),
+		"Senha": string(login.Password),
 	})
 }
 
